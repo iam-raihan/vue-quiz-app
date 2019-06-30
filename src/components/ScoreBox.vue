@@ -5,7 +5,7 @@
       Score :
       <span class="rounded-lg score-box">
         <code class="text-white">
-          <b>&nbsp; 0 / 5 &nbsp;</b>
+          <b>&nbsp; {{ correct }} / {{ getTotalAnswered }} &nbsp;</b>
         </code>
       </span>
     </h5>
@@ -13,7 +13,16 @@
 </template>
 
 <script>
-export default {};
+import { mapState, mapGetters } from "vuex";
+
+export default {
+  computed: {
+    ...mapState("QuizModule", {
+      correct: state => state.score.correct
+    }),
+    ...mapGetters("QuizModule", ["getTotalAnswered"])
+  }
+};
 </script>
 
 <style scoped>

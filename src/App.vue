@@ -23,6 +23,9 @@ export default {
   components: {
     QuizBox,
     ScoreBox
+  },
+  mounted() {
+    this.$store.dispatch("QuizModule/storeNewQuiz");
   }
 };
 </script>
