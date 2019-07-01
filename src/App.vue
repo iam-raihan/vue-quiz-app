@@ -25,7 +25,7 @@ export default {
     ScoreBox
   },
   mounted() {
-    this.$store.dispatch("QuizModule/storeNewQuiz");
+    this.$store.dispatch("QuizModule/init");
   }
 };
 </script>

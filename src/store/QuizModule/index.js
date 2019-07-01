@@ -1,4 +1,5 @@
 import QuizApi from "@/Api/QuizApi";
+import Utils from "../../Utils";
 
 /**
  * state
@@ -34,6 +35,9 @@ const mutations = {
   },
   setAnswerSubmitted(state) {
     state.answerSubmitted = true;
+  },
+  setScore(state, payload) {
+    state.score = payload;
   }
 };
 
@@ -41,6 +45,10 @@ const mutations = {
  * actions
  */
 const actions = {
+  init({ dispatch }) {
+    dispatch("storeNewQuiz");
+    dispatch("storeScoreFromStorage");
+  },
   storeNewQuiz({ commit }) {
     commit("setNewQuiz", null);
 
@@ -60,6 +68,11 @@ const actions = {
     const isCorrect = state.selectedAnswer === state.quiz.correct_answer;
     cb(isCorrect);
     commit("incrementScore", isCorrect);
+
+    Utils.storeScoreToStorage(state.score);
+  },
+  storeScoreFromStorage({ commit }) {
+    commit("setScore", Utils.retriveScoreFromStorage());
   }
 };
 
