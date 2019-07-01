@@ -2,31 +2,105 @@
   <div>
     <b-jumbotron>
       <template slot="lead">
-        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Cumque animi
-        accusamus vitae dolores ratione?
+        Quiz : <i>{{ getQuestion }}</i>
       </template>
+
       <hr class="my-4" />
+
       <b-list-group>
-        <b-list-group-item button>Answer 1</b-list-group-item>
-        <b-list-group-item button>Answer 2</b-list-group-item>
-        <b-list-group-item button>Answer 3</b-list-group-item>
-        <b-list-group-item button>Answer 4</b-list-group-item>
+        <b-list-group-item
+          button
+          v-for="(option, index) in getQuizOptions"
+          :key="index"
+          @click="onAnswerSelected(option)"
+          :class="[getBtnClass(option)]"
+          >{{ option }}
+        </b-list-group-item>
       </b-list-group>
 
       <div class="mt-3"></div>
 
-      <b-button variant="primary">Submit</b-button>
-      <b-button variant="success" class="ml-2">Next</b-button>
+      <span id="submit-btn-span">
+        <b-button
+          @click="onSubmitAnswer"
+          variant="primary"
+          :disabled="!canSubmitAnswer"
+        >
+          Submit
+        </b-button>
+      </span>
+
+      <b-button @click="storeNewQuiz" variant="success" class="ml-2"
+        >Next</b-button
+      >
     </b-jumbotron>
+
+    <b-tooltip
+      v-b-tooltip.hover
+      :disabled="isAnswerSelected"
+      placement="left"
+      target="submit-btn-span"
+      title="Select an option!"
+    >
+    </b-tooltip>
   </div>
 </template>
 
 <script>
-export default {};
+import { mapState, mapGetters, mapActions } from "vuex";
+
+export default {
+  computed: {
+    ...mapState("QuizModule", ["selectedAnswer", "answerSubmitted"]),
+    ...mapGetters("QuizModule", [
+      "getQuestion",
+      "getQuizOptions",
+      "canSubmitAnswer",
+      "isAnswerSelected",
+      "getCorrectAnswer"
+    ])
+  },
+  methods: {
+    ...mapActions("QuizModule", [
+      "onAnswerSelected",
+      "onSubmitAnswer",
+      "storeNewQuiz"
+    ]),
+    // getNextQuiz() {
+    //   this.$store.dispatch("QuizModule/storeNewQuiz");
+    // },
+    getBtnClass(option) {
+      if (this.answerSubmitted === true) {
+        if (option === this.getCorrectAnswer) return "ans-correct";
+        if (option === this.selectedAnswer) return "ans-incorrect";
+        return "disabled";
+      }
+
+      if (option === this.selectedAnswer) return "ans-selected";
+
+      return "ans-btn";
+    }
+  }
+};
 </script>
 
 <style scoped>
-.answer-btn:hover {
+.ans-btn:hover {
   background-color: #b3e5fc;
+}
+.ans-selected {
+  background-color: #007bffb7 !important;
+}
+.ans-incorrect {
+  background-color: #ee5253 !important;
+}
+.ans-correct {
+  background-color: #10ac84 !important;
+}
+.ans-selected,
+.ans-correct,
+.ans-incorrect {
+  color: whitesmoke !important;
+  pointer-events: none;
 }
 </style>
