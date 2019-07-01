@@ -22,7 +22,7 @@
 
       <span id="submit-btn-span">
         <b-button
-          @click="onSubmitAnswer"
+          @click="submitAnswer"
           variant="primary"
           :disabled="!canSubmitAnswer"
         >
@@ -48,6 +48,7 @@
 
 <script>
 import { mapState, mapGetters, mapActions } from "vuex";
+import Utils from "@/Utils";
 
 export default {
   computed: {
@@ -79,6 +80,11 @@ export default {
       if (option === this.selectedAnswer) return "ans-selected";
 
       return "ans-btn";
+    },
+    submitAnswer() {
+      this.$store.dispatch("QuizModule/onSubmitAnswer", isCorrect => {
+        Utils.onSubmitNotify(isCorrect, this.$toast);
+      });
     }
   }
 };

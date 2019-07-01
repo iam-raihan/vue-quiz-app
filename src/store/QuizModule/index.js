@@ -54,10 +54,11 @@ const actions = {
   onAnswerSelected({ commit, state }, answer) {
     if (state.answerSubmitted === false) commit("setSelectedAnswer", answer);
   },
-  onSubmitAnswer({ commit, state }) {
+  onSubmitAnswer({ commit, state }, cb) {
     commit("setAnswerSubmitted");
 
     const isCorrect = state.selectedAnswer === state.quiz.correct_answer;
+    cb(isCorrect);
     commit("incrementScore", isCorrect);
   }
 };
