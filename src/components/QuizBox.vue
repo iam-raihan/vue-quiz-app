@@ -16,29 +16,38 @@
           :key="index"
           @click="onAnswerSelected(option)"
           :class="[getBtnClass(option)]"
-          >{{ option }}
+          v-html="option"
+        >
         </b-list-group-item>
       </b-list-group>
 
       <div class="mt-3"></div>
+      <b-spinner
+        v-if="isLoading"
+        type="grow"
+        variant="primary"
+        label="Spinning"
+      ></b-spinner>
+      <div v-show="!isLoading">
+        <span id="submit-btn-span">
+          <b-button
+            @click="onSubmitAnswer(showNotification)"
+            variant="primary"
+            :disabled="!canSubmitAnswer"
+          >
+            Submit
+          </b-button>
+        </span>
 
-      <span id="submit-btn-span">
         <b-button
-          @click="onSubmitAnswer(showNotification)"
-          variant="primary"
-          :disabled="!canSubmitAnswer"
+          @click="storeNewQuiz"
+          variant="success"
+          class="ml-2"
+          id="next-btn"
         >
-          Submit
+          Next
         </b-button>
-      </span>
-
-      <b-button
-        @click="storeNewQuiz"
-        variant="success"
-        class="ml-2"
-        id="next-btn"
-        >Next</b-button
-      >
+      </div>
     </b-jumbotron>
 
     <!-- instruction tooltips -->
@@ -67,6 +76,7 @@ import { mapState, mapGetters, mapActions } from "vuex";
 
 export default {
   computed: {
+    // Namespaced
     ...mapState("QuizModule", ["selectedAnswer", "answerSubmitted"]),
     ...mapGetters("QuizModule", [
       "getQuestion",
@@ -74,7 +84,8 @@ export default {
       "canSubmitAnswer",
       "isAnswerSelected",
       "getCorrectAnswer"
-    ])
+    ]),
+    ...mapGetters(["isLoading"])
   },
   methods: {
     ...mapActions("QuizModule", [

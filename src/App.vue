@@ -11,6 +11,16 @@
         <my-quiz-box />
       </b-col>
     </b-row>
+    <b-row>
+      <b-col>
+        <code>
+          GitHub Link >>
+          <a target="_blank" href="https://github.com/iam-raihan/vue-quiz-app">
+            <img height="20px" src="/GitHub-Mark-32px.png" alt="Github" />
+          </a>
+        </code>
+      </b-col>
+    </b-row>
   </div>
 </template>
 

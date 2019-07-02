@@ -9,8 +9,18 @@ export default new Vuex.Store({
   modules: {
     QuizModule
   },
-  state: {},
-  mutations: {},
+  state: {
+    loading: false
+  },
+  mutations: {
+    setLoading(state, payload) {
+      state.loading = payload;
+    }
+  },
   actions: {},
-  getters: {}
+  getters: {
+    isLoading(state) {
+      return state.loading;
+    }
+  }
 });

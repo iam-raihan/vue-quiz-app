@@ -51,11 +51,13 @@ const actions = {
   },
   storeNewQuiz({ commit }) {
     commit("setNewQuiz", null);
+    commit("setLoading", true, { root: true });
 
     QuizApi.newQuizAsync()
       .then(data => {
         console.log("quiz received");
         commit("setNewQuiz", data);
+        commit("setLoading", false, { root: true });
       })
       .catch(err => console.log(err));
   },
