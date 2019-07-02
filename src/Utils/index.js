@@ -1,30 +1,16 @@
-const validateScoreData = scoreData => {
-  let score;
-  const defaultData = {
-    correct: 0,
-    wrong: 0
-  };
+import ShowToolTipsLimitedTime from "./ToolTipsUtils";
+import {
+  ScoreInStorage,
+  InstructionsViewCountInStorage
+} from "./LocalStorageUtils";
 
-  try {
-    score = JSON.parse(scoreData) || {};
-  } catch {
-    return defaultData;
-  }
-
-  return score.correct > -1 && score.wrong > -1 ? score : defaultData;
-};
-
-export default {
-  onSubmitNotify: (isCorrect, toast) => {
-    if (isCorrect) toast.success({ message: "Correct Answer" });
-    else toast.error({ message: "Wrong Answer" });
-  },
-
-  storeScoreToStorage: score => {
-    localStorage.setItem("score", JSON.stringify(score));
-  },
-
-  retriveScoreFromStorage: () => {
-    return validateScoreData(localStorage.getItem("score"));
+// check counter and show instructions
+export const ShowInstructions = async options => {
+  let viewCount = InstructionsViewCountInStorage.Retrive();
+  if (viewCount < options.maxViewCount) {
+    await ShowToolTipsLimitedTime(options);
+    InstructionsViewCountInStorage.Store(++viewCount);
   }
 };
+
+export { ScoreInStorage };

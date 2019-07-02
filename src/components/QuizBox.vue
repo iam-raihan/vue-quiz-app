@@ -2,7 +2,9 @@
   <div>
     <b-jumbotron>
       <template slot="lead">
-        Quiz : <i>{{ getQuestion }}</i>
+        <div id="question-box">
+          Quiz : <i>{{ getQuestion }}</i>
+        </div>
       </template>
 
       <hr class="my-4" />
@@ -30,25 +32,38 @@
         </b-button>
       </span>
 
-      <b-button @click="storeNewQuiz" variant="success" class="ml-2"
+      <b-button
+        @click="storeNewQuiz"
+        variant="success"
+        class="ml-2"
+        id="next-btn"
         >Next</b-button
       >
     </b-jumbotron>
+
+    <!-- instruction tooltips -->
+    <b-tooltip placement="left" target="question-box" triggers>
+      Read question carefully
+    </b-tooltip>
 
     <b-tooltip
       v-b-tooltip.hover
       :disabled="isAnswerSelected"
       placement="left"
       target="submit-btn-span"
-      title="Select an option!"
     >
+      Select your answer <br />
+      then click Submit
+    </b-tooltip>
+
+    <b-tooltip placement="right" target="next-btn" triggers>
+      Click Next any time for next Quiz
     </b-tooltip>
   </div>
 </template>
 
 <script>
 import { mapState, mapGetters, mapActions } from "vuex";
-import Utils from "@/Utils";
 
 export default {
   computed: {
@@ -83,7 +98,8 @@ export default {
     },
     submitAnswer() {
       this.$store.dispatch("QuizModule/onSubmitAnswer", isCorrect => {
-        Utils.onSubmitNotify(isCorrect, this.$toast);
+        if (isCorrect) this.$toast.success({ message: "Correct Answer" });
+        else this.$toast.error({ message: "Wrong Answer" });
       });
     }
   }

@@ -1,5 +1,5 @@
 import QuizApi from "@/Api/QuizApi";
-import Utils from "../../Utils";
+import { ScoreInStorage } from "@/Utils";
 
 /**
  * state
@@ -69,10 +69,10 @@ const actions = {
     cb(isCorrect);
     commit("incrementScore", isCorrect);
 
-    Utils.storeScoreToStorage(state.score);
+    ScoreInStorage.Store(state.score);
   },
   storeScoreFromStorage({ commit }) {
-    commit("setScore", Utils.retriveScoreFromStorage());
+    commit("setScore", ScoreInStorage.Retrive());
   }
 };
 
