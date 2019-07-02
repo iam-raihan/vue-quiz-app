@@ -3,7 +3,7 @@
     <b-jumbotron>
       <template slot="lead">
         <div id="question-box">
-          Quiz : <i>{{ getQuestion }}</i>
+          Quiz : <i><span v-html="getQuestion"></span></i>
         </div>
       </template>
 
@@ -24,7 +24,7 @@
 
       <span id="submit-btn-span">
         <b-button
-          @click="submitAnswer"
+          @click="onSubmitAnswer(showNotification)"
           variant="primary"
           :disabled="!canSubmitAnswer"
         >
@@ -82,9 +82,6 @@ export default {
       "onSubmitAnswer",
       "storeNewQuiz"
     ]),
-    // getNextQuiz() {
-    //   this.$store.dispatch("QuizModule/storeNewQuiz");
-    // },
     getBtnClass(option) {
       if (this.answerSubmitted === true) {
         if (option === this.getCorrectAnswer) return "ans-correct";
@@ -96,11 +93,9 @@ export default {
 
       return "ans-btn";
     },
-    submitAnswer() {
-      this.$store.dispatch("QuizModule/onSubmitAnswer", isCorrect => {
-        if (isCorrect) this.$toast.success({ message: "Correct Answer" });
-        else this.$toast.error({ message: "Wrong Answer" });
-      });
+    showNotification(isCorrect) {
+      if (isCorrect) this.$toast.success({ message: "Correct Answer" });
+      else this.$toast.error({ message: "Wrong Answer" });
     }
   }
 };
